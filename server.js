@@ -7,27 +7,33 @@ app.use(cors());
 app.use(express.json({limit:"10mb"}));
 
 
-// Generate AI image using Stable Diffusion XL (Pollinations FREE)
+// Generate image and return base64
 app.post("/generate", async (req, res) => {
 
-try{
+try {
 
 const { prompt } = req.body;
 
-console.log("Prompt received:", prompt);
+console.log("Prompt:", prompt);
 
-// Generate image URL
+// Pollinations image URL
 const imageUrl =
-`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}.png?width=1024&height=1024&seed=${Math.random()}`;
+`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${Math.random()}`;
 
-console.log("Generated image URL:", imageUrl);
+// Fetch image
+const response = await fetch(imageUrl);
 
-// Return image URL
+const arrayBuffer = await response.arrayBuffer();
+
+const base64 = Buffer.from(arrayBuffer).toString("base64");
+
+const imageBase64 = `data:image/png;base64,${base64}`;
+
 res.json({
-image: imageUrl
+image: imageBase64
 });
 
-}catch(error){
+} catch (error) {
 
 console.log(error);
 
@@ -40,16 +46,15 @@ error: error.toString()
 });
 
 
-// test route
 app.get("/", (req,res)=>{
 
-res.send("Stable Diffusion backend running");
+res.send("Backend running");
 
 });
 
 
 app.listen(3000, ()=>{
 
-console.log("Server running on port 3000");
+console.log("Server running");
 
 });
