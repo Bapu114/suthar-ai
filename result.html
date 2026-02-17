@@ -33,10 +33,6 @@ border:none;
 margin-top:15px;
 cursor:pointer;
 }
-
-button:hover{
-background:gray;
-}
 </style>
 
 </head>
@@ -57,17 +53,20 @@ background:gray;
 
 <script>
 
-// get saved image
+// get generated image URL
 const img = localStorage.getItem("generatedImage");
 
-// show image
 if(img){
+
 document.getElementById("resultImage").src = img;
+
 }else{
-document.getElementById("resultImage").alt="No image found";
+
+document.body.innerHTML += "<p>No image generated</p>";
+
 }
 
-// go back to homepage
+// back button
 function goBack(){
 
 window.location.href="/";
@@ -78,3 +77,4 @@ window.location.href="/";
 
 </body>
 </html>
+
