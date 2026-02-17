@@ -1,4 +1,4 @@
-const BACKEND_URL="PASTE_YOUR_RENDER_BACKEND_URL_HERE";
+const BACKEND_URL="https://suthar-ai-frontend.onrender.com";
 let prompts={
 classical:"Redesign bungalow into luxury classical villa, ultra realistic, 4k render",
 modern:"Redesign bungalow into modern luxury contemporary villa, ultra realistic, 4k render",
