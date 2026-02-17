@@ -2,19 +2,79 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Suthar AI Result</title>
-<link rel="stylesheet" href="style.css">
+<title>Generated Design</title>
+
+<style>
+body{
+font-family: Arial;
+background:#f2f2f2;
+text-align:center;
+}
+
+.container{
+background:white;
+padding:20px;
+margin:40px auto;
+width:500px;
+border-radius:10px;
+box-shadow:0px 0px 10px gray;
+}
+
+img{
+max-width:100%;
+margin-top:15px;
+}
+
+button{
+padding:12px 20px;
+background:black;
+color:white;
+border:none;
+margin-top:15px;
+cursor:pointer;
+}
+
+button:hover{
+background:gray;
+}
+</style>
+
 </head>
+
 <body>
+
 <div class="container">
+
 <h1>Generated Design</h1>
+
 <img id="resultImage">
-<button onclick="back()">Back</button>
+
+<br>
+
+<button onclick="goBack()">Back</button>
+
 </div>
+
 <script>
-document.getElementById("resultImage").src =
-localStorage.getItem("generatedImage");
-function back(){window.location.href="index.html";}
+
+// get saved image
+const img = localStorage.getItem("generatedImage");
+
+// show image
+if(img){
+document.getElementById("resultImage").src = img;
+}else{
+document.getElementById("resultImage").alt="No image found";
+}
+
+// go back to homepage
+function goBack(){
+
+window.location.href="/";
+
+}
+
 </script>
+
 </body>
 </html>
