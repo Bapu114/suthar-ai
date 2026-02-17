@@ -18,7 +18,7 @@ console.log("Prompt received:", prompt);
 
 // Generate image URL
 const imageUrl =
-`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&model=stable-diffusion-xl&seed=${Math.random()}`;
+`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}.png?width=1024&height=1024&seed=${Math.random()}`;
 
 console.log("Generated image URL:", imageUrl);
 
