@@ -1,22 +1,22 @@
-const express=require("express");
-const cors=require("cors");
-const fetch=require("node-fetch");
+const express = require("express");
+const cors = require("cors");
+const fetch = require("node-fetch");
 
-const app=express();
+const app = express();
 
 app.use(cors());
-app.use(express.json({limit:"10mb"}));
+app.use(express.json({limit:"20mb"}));
 
-const API_KEY="AIzaSyBLLQLPv9ACqbw-uLpIYskcjzMIp18dQQQ";
+const API_KEY = "AIzaSyBLLQLPv9ACqbw-uLpIYskcjzMIp18dQQQ";
 
-app.post("/generate",async(req,res)=>{
+app.post("/generate", async (req, res) => {
 
-try{
+try {
 
-const {image,prompt}=req.body;
+const {image, prompt} = req.body;
 
-const response=await fetch(
-`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+const response = await fetch(
+`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${API_KEY}`,
 {
 method:"POST",
 headers:{
@@ -39,16 +39,46 @@ data:image
 })
 });
 
-const data=await response.json();
+const data = await response.json();
 
-res.json(data);
+console.log(data);
 
-}catch(e){
+if(data.candidates){
 
-res.status(500).json(e);
+const imagePart = data.candidates[0].content.parts.find(
+part => part.inline_data
+);
+
+if(imagePart){
+
+res.json({
+image:"data:image/png;base64," + imagePart.inline_data.data
+});
+
+return;
+
+}
+
+}
+
+res.json({error:"No image returned", full:data});
+
+}
+catch(e){
+
+console.log(e);
+
+res.json({error:e.toString()});
 
 }
 
 });
 
-app.listen(3000,()=>console.log("Server started http://localhost:3000"));
+app.get("/", (req,res)=>{
+res.send("Backend running");
+});
+
+app.listen(3000, ()=>{
+console.log("Server started");
+});
+
