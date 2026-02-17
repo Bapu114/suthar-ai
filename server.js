@@ -4,57 +4,39 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
-app.use(express.json({ limit: "20mb" }));
+app.use(express.json({limit:"20mb"}));
 
-// IMPORTANT: paste your Gemini API key here
-const API_KEY = "AIzaSyBLLQLPv9ACqbw-uLpIYskcjzMIp18dQQQ";
-
-
-// generate route
 app.post("/generate", async (req, res) => {
 
 try {
 
-const { image, prompt } = req.body;
+const { prompt } = req.body;
 
-console.log("Received request");
-
-// Gemini free API currently does not return edited image reliably
-// So we return original image so frontend works correctly
+// Stable Diffusion XL via Pollinations (FREE)
+const imageUrl =
+`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&model=stable-diffusion-xl&seed=${Math.random()}`;
 
 res.json({
-
-image: "data:image/jpeg;base64," + image,
-description: "Design generated successfully"
-
+image: imageUrl
 });
 
 } catch (error) {
 
 console.log(error);
 
-res.status(500).json({
-
+res.json({
 error: error.toString()
-
 });
 
 }
 
 });
 
-
-// test route
-app.get("/", (req, res) => {
-
-res.send("Backend running");
-
+app.get("/", (req,res)=>{
+res.send("Stable Diffusion backend running");
 });
 
-
-app.listen(3000, () => {
-
-console.log("Server running on port 3000");
-
+app.listen(3000, ()=>{
+console.log("Server running");
 });
 
