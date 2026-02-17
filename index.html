@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Suthar AI Design Ideation</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<h1>Suthar AI Design Ideation</h1>
+<h3>Model Name: Suthar</h3>
+<input type="file" id="imageUpload" accept="image/*">
+<img id="preview">
+<select id="designType">
+<option value="">Select Design Type</option>
+<option value="classical">Classical</option>
+<option value="modern">Modern</option>
+<option value="neoclassical">Neoclassical</option>
+</select>
+<button onclick="generateDesign()">Generate AI Design</button>
+<div id="loading"></div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
