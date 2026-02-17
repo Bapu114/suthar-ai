@@ -9,7 +9,56 @@ app.use(express.json({ limit: "20mb" }));
 
 const API_KEY = "AIzaSyBLLQLPv9ACqbw-uLpIYskcjzMIp18dQQQ";
 
-app.post("/generate", async (req, res) => {
+app.post("app.post("/generate", async (req, res) => {
+  try {
+
+    const { image, prompt } = req.body;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                { text: prompt },
+                {
+                  inline_data: {
+                    mime_type: "image/jpeg",
+                    data: image,
+                  },
+                },
+              ],
+            },
+          ],
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    // Return original image so frontend can display
+    res.json({
+      image: "data:image/jpeg;base64," + image
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.json({
+      error: error.toString()
+    });
+
+  }
+});
+", async (req, res) => {
   try {
     const { image, prompt } = req.body;
 
