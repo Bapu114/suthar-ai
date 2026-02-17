@@ -2,24 +2,40 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Suthar AI Design Ideation</title>
+<title>Generated Design</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="container">
-<h1>Suthar AI Design Ideation</h1>
-<h3>Model Name: Suthar</h3>
-<input type="file" id="imageUpload" accept="image/*">
-<img id="preview">
-<select id="designType">
-<option value="">Select Design Type</option>
-<option value="classical">Classical</option>
-<option value="modern">Modern</option>
-<option value="neoclassical">Neoclassical</option>
-</select>
-<button onclick="generateDesign()">Generate AI Design</button>
-<div id="loading"></div>
+
+<h1>Generated Design</h1>
+
+<img id="resultImage" style="max-width:100%;">
+
+<br><br>
+
+<button onclick="goBack()">Back</button>
+
 </div>
-<script src="script.js"></script>
+
+<script>
+
+const img = localStorage.getItem("generatedImage");
+
+console.log("Saved image:", img);
+
+if(img){
+document.getElementById("resultImage").src = img;
+}else{
+document.body.innerHTML += "<p>No image found</p>";
+}
+
+function goBack(){
+window.location.href="index.html";
+}
+
+</script>
+
 </body>
 </html>
