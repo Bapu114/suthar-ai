@@ -44,7 +44,7 @@ cursor:pointer;
 
 <h1>Generated Design</h1>
 
-<img id="resultImage" src="" alt="Loading image...">
+<img id="resultImage" alt="Generated image will appear here">
 
 <br>
 
@@ -54,33 +54,25 @@ cursor:pointer;
 
 <script>
 
-const img = document.getElementById("resultImage");
+// load base64 image
+const imageData = localStorage.getItem("generatedImage");
 
-const imageUrl = localStorage.getItem("generatedImage");
+console.log("Loaded image:", imageData);
 
-console.log("Loaded image:", imageUrl);
+// display image safely
+if(imageData && imageData.startsWith("data:image")){
 
-if(imageUrl){
-
-// FORCE image load
-img.src = imageUrl;
-
-// retry if fails
-img.onerror = function(){
-
-console.log("Retry loading image...");
-
-// use proxy reload trick
-img.src = imageUrl + "?t=" + new Date().getTime();
-
-};
+document.getElementById("resultImage").src = imageData;
 
 }else{
 
-img.alt = "No image generated";
+document.getElementById("resultImage").alt = "No valid image generated";
+
+console.error("Invalid base64 image");
 
 }
 
+// back button
 function goBack(){
 
 window.location.href="/";
