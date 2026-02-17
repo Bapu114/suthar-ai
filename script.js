@@ -1,69 +1,49 @@
-// IMPORTANT: paste your backend URL here
 const BACKEND_URL = "https://suthar-ai01.onrender.com";
 
 let prompts = {
 
 classical:
-"Redesign my existing bungalow into luxury classical neoclassical villa, ultra realistic architectural render",
+"luxury classical neoclassical bungalow, beige limestone facade, columns, ornate details, ultra realistic architectural render",
 
 modern:
-"Redesign my existing bungalow into modern luxury contemporary villa, ultra realistic architectural render",
+"modern luxury contemporary bungalow, glass facade, concrete and wood materials, minimalist architecture, ultra realistic",
 
 neoclassical:
-"Redesign my existing bungalow into modern neoclassical luxury villa, ultra realistic architectural render"
+"modern neoclassical luxury bungalow, symmetrical facade, elegant columns, premium architecture, ultra realistic"
 
 };
 
-let uploadedBase64 = "";
 
-// when user uploads image
-document.getElementById("imageUpload").onchange = function(e) {
-
-let file = e.target.files[0];
+document.getElementById("imageUpload").onchange = function(e){
 
 let reader = new FileReader();
 
-reader.onload = function() {
+reader.onload = function(){
 
-uploadedBase64 = reader.result;
-
-// show preview
-document.getElementById("preview").src = uploadedBase64;
+document.getElementById("preview").src = reader.result;
 
 };
 
-reader.readAsDataURL(file);
+reader.readAsDataURL(e.target.files[0]);
 
 };
 
 
-// generate design
-async function generateDesign() {
+async function generateDesign(){
 
 let type = document.getElementById("designType").value;
 
-if (!uploadedBase64) {
+if(!type){
 
-alert("Please upload image first");
-
-return;
-
-}
-
-if (!type) {
-
-alert("Please select design type");
+alert("Select design type");
 
 return;
 
 }
 
-document.getElementById("loading").innerText = "Generating design...";
+document.getElementById("loading").innerText = "Generating AI Design...";
 
-// remove data:image/jpeg;base64,
-let base64 = uploadedBase64.split(",")[1];
-
-try {
+try{
 
 let response = await fetch(BACKEND_URL + "/generate", {
 
@@ -74,7 +54,6 @@ headers: {
 },
 
 body: JSON.stringify({
-image: base64,
 prompt: prompts[type]
 })
 
@@ -82,27 +61,25 @@ prompt: prompts[type]
 
 let data = await response.json();
 
-console.log("Backend response:", data);
-
-// save image and open result page
-if (data.image) {
+if(data.image){
 
 localStorage.setItem("generatedImage", data.image);
 
 window.location.href = "result.html";
 
-} else {
+}else{
 
-alert("Generation failed. No image returned.");
+alert("Generation failed");
 
 }
 
-} catch (error) {
-
-console.log(error);
+}catch(e){
 
 alert("Connection error");
 
+console.log(e);
+
 }
 
 }
+
