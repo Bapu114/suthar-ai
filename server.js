@@ -5,26 +5,33 @@ const https = require("https");
 const app = express();
 
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json());
 
-
-// generate image route
 app.post("/generate", (req, res) => {
 
 const prompt = req.body.prompt;
 
-console.log("Generating image for:", prompt);
+console.log("Prompt:", prompt);
 
-const imageUrl =
-`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${Math.random()}`;
+const url =
+`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
 
-https.get(imageUrl, (response) => {
+https.get(url, (response) => {
 
-const contentType = response.headers["content-type"];
+let chunks = [];
 
-if (!contentType || !contentType.startsWith("image")) {
+response.on("data", (chunk) => {
+chunks.push(chunk);
+});
 
-console.log("Invalid response, not an image");
+response.on("end", () => {
+
+const buffer = Buffer.concat(chunks);
+
+// Check if buffer is valid image
+if (buffer.length < 1000) {
+
+console.log("Invalid image received");
 
 return res.json({
 error: "Image generation failed"
@@ -32,23 +39,15 @@ error: "Image generation failed"
 
 }
 
-let data = [];
-
-response.on("data", chunk => {
-data.push(chunk);
-});
-
-response.on("end", () => {
-
-const buffer = Buffer.concat(data);
-
 const base64 = buffer.toString("base64");
 
 const image = `data:image/png;base64,${base64}`;
 
-console.log("Image generated successfully");
+console.log("Image success");
 
-res.json({ image });
+res.json({
+image: image
+});
 
 });
 
@@ -57,7 +56,7 @@ res.json({ image });
 console.log("Fetch error:", err);
 
 res.json({
-error: "Image fetch failed"
+error: "Fetch failed"
 });
 
 });
@@ -65,12 +64,11 @@ error: "Image fetch failed"
 });
 
 
-// test route
 app.get("/", (req, res) => {
-res.send("Backend working");
+res.send("Backend OK");
 });
 
 
 app.listen(3000, () => {
-console.log("Server running on port 3000");
+console.log("Server running");
 });
