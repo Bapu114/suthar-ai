@@ -8,20 +8,29 @@ app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
 
-// Generate AI image route
+// generate image route
 app.post("/generate", (req, res) => {
-
-try {
 
 const prompt = req.body.prompt;
 
-console.log("Prompt:", prompt);
+console.log("Generating image for:", prompt);
 
-const url =
+const imageUrl =
 `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${Math.random()}`;
 
-// Fetch image using https module
-https.get(url, (response) => {
+https.get(imageUrl, (response) => {
+
+const contentType = response.headers["content-type"];
+
+if (!contentType || !contentType.startsWith("image")) {
+
+console.log("Invalid response, not an image");
+
+return res.json({
+error: "Image generation failed"
+});
+
+}
 
 let data = [];
 
@@ -43,32 +52,22 @@ res.json({ image });
 
 });
 
-}).on("error", (error) => {
+}).on("error", (err) => {
 
-console.log("Fetch error:", error);
+console.log("Fetch error:", err);
 
-res.status(500).json({
+res.json({
 error: "Image fetch failed"
 });
 
 });
 
-} catch (error) {
-
-console.log("Server error:", error);
-
-res.status(500).json({
-error: "Server error"
-});
-
-}
-
 });
 
 
-// Test route
+// test route
 app.get("/", (req, res) => {
-res.send("Backend working correctly");
+res.send("Backend working");
 });
 
 
