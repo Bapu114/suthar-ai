@@ -43,7 +43,7 @@ cursor:pointer;
 
 <h1>Generated Design</h1>
 
-<img id="resultImage">
+<img id="resultImage" src="" alt="Generated image will appear here">
 
 <br>
 
@@ -53,18 +53,22 @@ cursor:pointer;
 
 <script>
 
-// get generated image URL
-const img = localStorage.getItem("generatedImage");
+// get image from localStorage
+const imageUrl = localStorage.getItem("generatedImage");
 
-if(img){
+console.log("Loaded image URL:", imageUrl);
 
-document.getElementById("resultImage").src = img;
+// display image
+if(imageUrl && imageUrl !== "undefined" && imageUrl !== "null"){
+
+document.getElementById("resultImage").src = imageUrl;
 
 }else{
 
-document.body.innerHTML += "<p>No image generated</p>";
+document.getElementById("resultImage").alt = "No image generated";
 
 }
+
 
 // back button
 function goBack(){
