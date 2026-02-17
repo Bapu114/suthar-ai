@@ -15,7 +15,7 @@ text-align:center;
 background:white;
 padding:20px;
 margin:40px auto;
-width:500px;
+width:600px;
 border-radius:10px;
 box-shadow:0px 0px 10px gray;
 }
@@ -23,6 +23,7 @@ box-shadow:0px 0px 10px gray;
 img{
 max-width:100%;
 margin-top:15px;
+border:1px solid #ccc;
 }
 
 button{
@@ -43,7 +44,7 @@ cursor:pointer;
 
 <h1>Generated Design</h1>
 
-<img id="resultImage" src="" alt="Generated image will appear here">
+<img id="resultImage">
 
 <br>
 
@@ -53,24 +54,32 @@ cursor:pointer;
 
 <script>
 
-// get image from localStorage
 const imageUrl = localStorage.getItem("generatedImage");
 
 console.log("Loaded image URL:", imageUrl);
 
-// display image
-if(imageUrl && imageUrl !== "undefined" && imageUrl !== "null"){
+if(imageUrl){
 
-document.getElementById("resultImage").src = imageUrl;
+const imgElement = document.getElementById("resultImage");
+
+// FORCE reload image with timestamp
+imgElement.src = imageUrl + "&t=" + new Date().getTime();
+
+imgElement.onerror = function(){
+
+console.log("Image failed, retrying...");
+
+imgElement.src =
+"https://image.pollinations.ai/prompt/modern luxury bungalow architecture";
+
+};
 
 }else{
 
-document.getElementById("resultImage").alt = "No image generated";
+document.body.innerHTML += "<p>No image generated</p>";
 
 }
 
-
-// back button
 function goBack(){
 
 window.location.href="/";
@@ -81,4 +90,3 @@ window.location.href="/";
 
 </body>
 </html>
-
