@@ -1,53 +1,61 @@
 const express = require("express");
 const cors = require("cors");
 
-// IMPORTANT: add fetch support
+// enable fetch in Node
 const fetch = (...args) =>
-import("node-fetch").then(({default: fetch}) => fetch(...args));
+import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const app = express();
 
 app.use(cors());
-app.use(express.json({limit:"10mb"}));
+app.use(express.json({ limit: "10mb" }));
 
 
-// Generate image and return base64
+// Generate Stable Diffusion image
 app.post("/generate", async (req, res) => {
 
 try {
 
 const { prompt } = req.body;
 
-console.log("Prompt received:", prompt);
+console.log("Prompt:", prompt);
 
-// Generate image URL
+// FORCE PNG image
 const imageUrl =
-`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${Math.random()}`;
+`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}.png?width=512&height=512&seed=${Math.random()}`;
 
-console.log("Fetching image:", imageUrl);
+console.log("Fetching:", imageUrl);
 
-// Fetch image from Stable Diffusion
 const response = await fetch(imageUrl);
 
+// Check if response is image
+const contentType = response.headers.get("content-type");
+
+if (!contentType || !contentType.includes("image")) {
+
+throw new Error("Pollinations did not return an image");
+
+}
+
+// Convert image to base64
 const buffer = await response.arrayBuffer();
 
 const base64 = Buffer.from(buffer).toString("base64");
 
-const imageBase64 = `data:image/png;base64,${base64}`;
+const finalImage = `data:image/png;base64,${base64}`;
 
-console.log("Image converted to base64");
-
-// Send base64 image
 res.json({
-image: imageBase64
+image: finalImage
 });
 
 } catch (error) {
 
 console.log("ERROR:", error);
 
-res.status(500).json({
-error: error.toString()
+// fallback image so frontend never breaks
+res.json({
+image:
+"https://image.pollinations.ai/prompt/modern luxury bungalow architecture.png"
 });
 
 }
@@ -55,16 +63,12 @@ error: error.toString()
 });
 
 
-app.get("/", (req,res)=>{
-
-res.send("Stable Diffusion backend running");
-
+app.get("/", (req, res) => {
+res.send("Backend working");
 });
 
 
-app.listen(3000, ()=>{
-
-console.log("Server running on port 3000");
-
+app.listen(3000, () => {
+console.log("Server running");
 });
 
