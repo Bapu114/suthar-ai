@@ -54,23 +54,21 @@ cursor:pointer;
 
 <script>
 
-// load base64 image
-const imageData = localStorage.getItem("generatedImage");
+// Load the image URL from storage
+    const imageData = localStorage.getItem("generatedImage");
 
-console.log("Loaded image:", imageData);
+    const resultImg = document.getElementById("resultImage");
 
-// display image safely
-if(imageData && imageData.startsWith("data:image")){
+    if(imageData) {
+        resultImg.src = imageData;
+        console.log("Displaying image from URL:", imageData);
+    } else {
+        resultImg.alt = "No design was generated.";
+    }
 
-document.getElementById("resultImage").src = imageData;
-
-}else{
-
-document.getElementById("resultImage").alt = "No valid image generated";
-
-console.error("Invalid base64 image");
-
-}
+    function goBack(){
+        window.location.href = "index.html";
+    }
 
 // back button
 function goBack(){
