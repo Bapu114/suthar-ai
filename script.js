@@ -1,5 +1,5 @@
 // IMPORTANT: Replace with your Render backend URL
-const BACKEND_URL = "srv-d6a3ihc9c44c738jj88g";
+const BACKEND_URL = "https://suthar-ai01.onrender.com";
 
 let prompts = {
 
