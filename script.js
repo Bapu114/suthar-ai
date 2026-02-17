@@ -1,4 +1,4 @@
-// IMPORTANT: Replace with your Render backend URL
+// IMPORTANT: Replace with your real backend URL
 const BACKEND_URL = "https://suthar-ai01.onrender.com";
 
 let prompts = {
@@ -44,7 +44,8 @@ return;
 
 }
 
-document.getElementById("loading").innerText = "Generating AI Design... Please wait.";
+document.getElementById("loading").innerText =
+"Generating AI Design... Please wait 5–10 seconds";
 
 try{
 
@@ -64,9 +65,9 @@ prompt: prompts[type]
 
 let data = await response.json();
 
-console.log("Backend response:", data);
+console.log("Backend returned:", data);
 
-// Save generated image URL
+// save base64 image
 if(data.image){
 
 localStorage.setItem("generatedImage", data.image);
