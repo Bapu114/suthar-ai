@@ -21,21 +21,23 @@
 
 <script>
 
+// load image
 const img = localStorage.getItem("generatedImage");
-
-console.log("Saved image:", img);
 
 if(img){
 document.getElementById("resultImage").src = img;
-}else{
-document.body.innerHTML += "<p>No image found</p>";
 }
 
+// back button
 function goBack(){
-window.location.href="index.html";
+
+// IMPORTANT: go back to homepage
+window.location.href = "/";
+
 }
 
 </script>
 
 </body>
 </html>
+
